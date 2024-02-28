@@ -1,0 +1,51 @@
+﻿@page "/Map"
+@inject IHttpClientFactory httpClientFactory
+@inject IJSRuntime JSRuntime
+
+<div id="map" style="height: 400px;"></div>
+
+@code {
+    private Point point;
+    private HttpClient httpClient;
+
+    protected override void OnInitialized()
+    {
+        // Utwórz własną instancję HttpClient za pomocą IHttpClientFactory
+        httpClient = httpClientFactory.CreateClient();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Pobierz punkt z Pythonowego API
+        var response = await httpClient.GetAsync("http://127.0.0.1:8000/points");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            var coordinates = JsonConvert.DeserializeObject<List<double>>(content);
+
+            // Utwórz obiekt Point na podstawie otrzymanych współrzędnych
+            point = new Point
+                {
+                    Latitude = coordinates[0],
+                    Longitude = coordinates[1]
+                };
+        }
+    }
+
+    // Klasa reprezentująca pojedynczy punkt
+    public class Point
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && point != null)
+        {
+            // Użyj biblioteki JavaScriptowej do renderowania punktu na mapie
+            await JSRuntime.InvokeVoidAsync("renderMap", point.Latitude, point.Longitude);
+        }
+    }
+}
