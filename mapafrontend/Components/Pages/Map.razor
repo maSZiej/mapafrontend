@@ -1,24 +1,32 @@
 ﻿@page "/Map"
+@rendermode InteractiveServer
 @inject IHttpClientFactory httpClientFactory
 @inject IJSRuntime JSRuntime
 
 <div id="map" style="height: 400px;"></div>
-
+<button class="btn btn-primary" @onclick="Clickk">Click me</button>
+@if (point != null) {
+    <p role="status">latitude: @point.Latitude</p>
+    <p role="status">longitude: @point.Longitude</p>
+}
 @code {
     private Point point;
-    private HttpClient httpClient;
-
+    //private HttpClient httpClient;
+    /*
     protected override void OnInitialized()
     {
         // Utwórz własną instancję HttpClient za pomocą IHttpClientFactory
         httpClient = httpClientFactory.CreateClient();
-    }
+    }*/
+    public HttpClient httpClient = new HttpClient();
 
-    protected override async Task OnInitializedAsync()
+    //protected override async Task OnInitializedAsync()
+    async Task Clickk()
     {
         // Pobierz punkt z Pythonowego API
+        Console.WriteLine("nie ok");
         var response = await httpClient.GetAsync("http://127.0.0.1:8000/points");
-
+        Console.WriteLine("okej");
         if (response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStringAsync();
@@ -30,6 +38,7 @@
                     Latitude = coordinates[0],
                     Longitude = coordinates[1]
                 };
+            Console.WriteLine(point);
         }
     }
 
