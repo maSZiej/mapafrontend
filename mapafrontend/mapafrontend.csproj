@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LeafletForBlazor" Version="2.0.2.6" />
+    <PackageReference Include="Majorsoft.Blazor.Components.Common.JsInterop" Version="1.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 

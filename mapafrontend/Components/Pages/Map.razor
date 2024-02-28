@@ -3,7 +3,10 @@
 @inject IHttpClientFactory httpClientFactory
 @inject IJSRuntime JSRuntime
 
-<div id="map" style="height: 400px;"></div>
+@*<div id="map" style="height: 400px;"></div>*@
+
+<Map width="400px" height="400px"></Map>
+
 <button class="btn btn-primary" @onclick="Clickk">Click me</button>
 @if (point != null) {
     <p role="status">latitude: @point.Latitude</p>
@@ -11,13 +14,7 @@
 }
 @code {
     private Point point;
-    //private HttpClient httpClient;
-    /*
-    protected override void OnInitialized()
-    {
-        // Utwórz własną instancję HttpClient za pomocą IHttpClientFactory
-        httpClient = httpClientFactory.CreateClient();
-    }*/
+
     public HttpClient httpClient = new HttpClient();
 
     //protected override async Task OnInitializedAsync()
